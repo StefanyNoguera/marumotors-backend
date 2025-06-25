@@ -3,7 +3,6 @@ from .api_views import (
     CarListView, CarDetailView,
     AutopartListView, AutopartDetailView
 )
-from .views import run_setup
 
 urlpatterns = [
     path('cars/', CarListView.as_view(), name='car-list'),
