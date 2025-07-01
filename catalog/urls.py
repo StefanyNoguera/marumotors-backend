@@ -1,7 +1,8 @@
 from django.urls import path
 from .api_views import (
     CarListView, CarDetailView,
-    AutopartListView, AutopartDetailView
+    AutopartListView, AutopartDetailView,
+    create_checkout_session
 )
 from .views import run_setup
 
@@ -11,4 +12,5 @@ urlpatterns = [
     path('autoparts/', AutopartListView.as_view(), name='autopart-list'),
     path('autoparts/<int:id>/', AutopartDetailView.as_view(), name='autopart-detail'),
     path('setup/', run_setup),
+    path('checkout/', create_checkout_session, name='checkout-session'),
 ]
