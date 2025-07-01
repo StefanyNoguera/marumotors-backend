@@ -138,3 +138,5 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 ALLOWED_HOSTS = ['*']
+
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
