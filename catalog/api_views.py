@@ -32,22 +32,24 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @csrf_exempt
 def create_checkout_session(request):
-    if request.method == 'POST':
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST allowed'}, status=405)
+
+    try:
         data = json.loads(request.body)
         items = data.get('items', [])
 
-        line_items = []
-        for item in items:
-            line_items.append({
+        line_items = [
+            {
                 'price_data': {
                     'currency': 'usd',
-                    'product_data': {
-                        'name': item['name'],
-                    },
+                    'product_data': {'name': item['name']},
                     'unit_amount': int(float(item['price']) * 100),
                 },
                 'quantity': item['quantity'],
-            })
+            }
+            for item in items
+        ]
 
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -56,4 +58,7 @@ def create_checkout_session(request):
             success_url=f"{settings.DOMAIN}/checkout-success",
             cancel_url=f"{settings.DOMAIN}/cart",
         )
+
         return JsonResponse({'url': session.url})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
